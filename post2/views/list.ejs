@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap에 필요한 CSS 파일 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/main.css">
+
+    <title>Daisy To Do</title>
+  </head>
+  <body>
+
+    <%- include('nav.html') %>
+
+    <!--Jumbotron이라고 검색하면 대문 템플릿 나옴-->
+
+      <div class="jumbotron">
+        <h1 class="display-4">Daisy To Do</h1>
+        <p class="lead">To Do List</p>
+        <hr class="my-4">
+        <p class="text-center">To Do 리스트를 확인해 보자.</p>
+      </div>
+
+      <div class="container">
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+            The current link item
+          </a>
+          <% for (var i=0; i<posts.length; i++){ %>
+          <a href="/detail" class="list-group-item list-group-item-action">
+            <h4>할일 제목: <%= posts[i].name%></h4>
+            <p>할일 마감날짜: <%=posts[i].date%></p>
+            <button class = "delete" data-id="<%= posts[i]._id %>">삭제</button>
+          </a>
+          <% } %>
+        </div>
+      </div>
+
+
+        <!-- <ul class="list-group">
+          <% for (var i=0; i<posts.length; i++){ %>
+          <li class="list-group-item">
+            <h4>할일 제목: <%=posts[i].name%></h4>
+            <p>할일 마감날짜: <%=posts[i].date%></p>
+            <button class = "delete" data-id="<%= posts[i]._id %>">삭제</button>
+          </li>
+          <% } %>
+        </ul>
+         -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+
+        <!--HTML에서 javascript 작성하는 법
+        jQuery라이브러리 도움을 받은 AJAX 요청. 당연히 
+              JQuery 라이브러리 설치가 필요하다. 밑에 내려가보면 JQuery 있다.-->
+        <script>
+          //class가 delete인 요소를 실행하면 ajax 동작을 실행해주세요. 라는 뜻.
+          $('.delete').click(function(e){
+            //e.target이라는 함수를 사용하는 것. 
+            //e.target = 실제로 누른 요소. 
+            // 그리고 그 숨겨져있는 요소 안의 data의 id를 가져다 주세요. 라는 뜻 
+            //(data-id라고 저장을 해준 것을 가져오는 것.)
+            var 글번호 = e.target.dataset.id;
+            //지금 이벤트가 동작하는 곳 = ($(list))
+            var 지금누른거 = $(this);
+            $.ajax({
+              method :'DELETE',
+              url: '/delete',
+              data: {_id:글번호}
+            }).done(function(result){
+              console.log('성공했습니다.');
+              //방금 누른 버튼의 부모의 li 를 찾아서 fadeout 시켜주세요.
+              지금누른거.parent('li').fadeOut();
+            }).fail(function(a, b, c){
+              console.log(a, b, c);
+              console.log('실패했습니다.');
+            });
+          });
+        </script>
+
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) 
+    바로 여기! 나는 위로 옮겨줬다.-->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS 
+    Bootstrap에 필요한 JS 파일 3개-->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>
